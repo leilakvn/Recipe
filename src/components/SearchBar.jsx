@@ -31,10 +31,13 @@ const SearchLabel = styled(InputLabel)(() => ({
     color: "#f6c453",
   },
 }));
-function SearchBar({ setQuery, setCurrentPage, query }) {
+function SearchBar({ setQuery, setCurrentPage, query, setIsEmpty }) {
   const [value, setValue] = useState("");
   useEffect(() => {
     setValue(value);
+    if (value === "") {
+      setIsEmpty(true);
+    }
   }, [value]);
   return (
     <Box sx={{ textAlign: "center", background: "#e1eedd" }}>

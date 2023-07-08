@@ -11,8 +11,6 @@ import {
   ClickAwayListener,
 } from "@mui/material";
 
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import { red, purple } from "@mui/material/colors";
 import { bgcolor, Box } from "@mui/system";
 import { useEffect, useState, useCallback } from "react";
 import Reciepe from "./components/Recipe";
@@ -24,7 +22,7 @@ import {
   nutritions,
 } from "./contexts/NutritionContext";
 import SearchBar from "./components/SearchBar";
-import { SettingsInputComponent } from "@mui/icons-material";
+import { arr, Padding, SettingsInputComponent } from "@mui/icons-material";
 import LoadingRecipes from "./components/LoadingRecipes";
 // const BlueOnGreenTooltip = styled(({ className, ...props }) => (
 //   <Tooltip {...props} componentsProps={{ tooltip: { className: className } }} />
@@ -45,6 +43,8 @@ const App = () => {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = reciepes.slice(indexOfFirstPost, indexOfLastPost);
   const [diet, setDiet] = useState(nutritions.diet);
+  const [health, setHealth] = useState(nutritions.health);
+  const [isEmpty, setIsEmpty] = useState(true);
 
   const SearchButton = styled(Button)({
     "&:hover": { color: "yellow" },
@@ -79,6 +79,7 @@ const App = () => {
         setQuery={setQuery}
         setCurrentPage={setCurrentPage}
         query={query}
+        setIsEmpty={setIsEmpty}
       ></SearchBar>
       <Box
         textAlign="center"
@@ -100,10 +101,13 @@ const App = () => {
               },
             },
           }}
-          open={!isOpen && isHover}
+          open={isOpen}
           title={
-            <NutritionContext.Provider value={{ diet, setDiet }}>
+            <NutritionContext.Provider
+              value={{ diet, setDiet, health, setHealth }}
+            >
               <SearchFilter
+                isEmpty={isEmpty}
                 baseUrl={baseUrl}
                 setReciepes={setReciepes}
                 setIsOpen={setIsOpen}
@@ -112,18 +116,19 @@ const App = () => {
           }
         >
           <Tab
-            label={"REFINE SEARCH BY Calories, Diet, Ingredients"}
+            // label={"REFINE SEARCH BY Calories, Diet, Ingredients"}
+            label="REFINE SEARCH BY Calories, Diet, Ingredients"
             onClick={() => setIsOpen(!isOpen)}
             onMouseOver={() => setIsHover(true)}
             // onMouseLeave={() => setIsHover(!isHover)}
             sx={{ fontSize: "12px" }}
-          >
-            <Tab label={"vvv"}></Tab>
-          </Tab>
+          ></Tab>
 
           {/* <ArrowDropDownIcon /> */}
         </Tooltip>
-
+        <span style={{marginLeft:"-16px"}}>
+        <i className="ri-arrow-down-s-fill"></i>
+        </span>
         {reciepes?.length > 0 ? ( //besiar momehem map *********
           <Container xs={12}>
             <Grid container sx={{ marginTop: "30px", rowGap: "10px" }}>
